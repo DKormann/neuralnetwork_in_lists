@@ -1,4 +1,6 @@
 
+
+from typing import Callable
 #%%
 
 def permute (n):
@@ -42,7 +44,6 @@ synapse_strength=1
 
 def Node(parents):
   synapses = []
-
   for parent in parents:
     synapses.append(Synapse(parent, 1))
   activation = 0
@@ -84,6 +85,21 @@ run([1,1])
 
 c = 0
 
+def print_node(node): print_node_d(node, 0)
+
+def print_node_d(node, d):
+  space = ""
+  for i in range(d):
+    space += "    "
+  print(space + "Node", node[node_baseline])
+
+
+  for synapse in node[node_synapses]:
+    print(space + "  - synapse", synapse[synapse_strength])
+    print_node_d(synapse[synapse_parent], d + 1)
+
+print_node(output)
+
 #%%
 c += 1
 def reward (node, signal):
@@ -99,24 +115,26 @@ def reward (node, signal):
 def train_step(inputs, solution):
   prediction = run(inputs)
   signal = solution - prediction
-  reward(output, signal * 0.1)
+  reward(output, signal * 0.05)
 
   if solution == 0:
     ok = prediction < 0.5
   else:
     ok = prediction >= 0.5
   
-  return inner1[node_activation], prediction, ok
+  return prediction, ok
 
 
-
-print(train_step([1, 1], 0))
-print(train_step([1, 0], 1))
-print(train_step([0, 1], 1))
-print(train_step([1, 1], 0))
-
-output[node_synapses][0][synapse_strength]
-c
 
 #%%
 
+def train(steps):
+  for i in range(steps):
+    result = []
+    for p in permute(2):
+      result.append(train_step(p, XOR(p)))
+  print(result)
+
+train(100)
+
+print_node(output)
