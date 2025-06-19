@@ -1,7 +1,4 @@
-
-
 from typing import Callable
-#%%
 
 def permute (n):
   if n < 1: return [[]]
@@ -11,14 +8,10 @@ def permute (n):
     res = res + [[1] + k] + [[0] + k]
   return res
 
-#%%
-
 def XOR (x):
   if x[0] == x[1]:
     return 0
   return 1
-
-#%%
 
 def map (f, x):
   res = []
@@ -26,12 +19,8 @@ def map (f, x):
     res.append(f(k))
   return res
 
-#%%
-
 X = permute(2)
 Y = map (XOR, X)
-
-#%%
 
 def Synapse(parent, strength):
   return[
@@ -93,14 +82,12 @@ def print_node_d(node, d):
     space += "    "
   print(space + "Node", node[node_baseline])
 
-
   for synapse in node[node_synapses]:
     print(space + "  - synapse", synapse[synapse_strength])
     print_node_d(synapse[synapse_parent], d + 1)
 
 print_node(output)
 
-#%%
 c += 1
 def reward (node, signal):
   for synapse in node[node_synapses]:
@@ -110,7 +97,6 @@ def reward (node, signal):
 
     synapse[synapse_strength] += signal * parent[node_activation]
     node[node_baseline] += signal
-
 
 def train_step(inputs, solution):
   prediction = run(inputs)
@@ -123,10 +109,6 @@ def train_step(inputs, solution):
     ok = prediction >= 0.5
   
   return prediction, ok
-
-
-
-#%%
 
 def train(steps):
   for i in range(steps):
